@@ -19,6 +19,7 @@ import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.DecimalFormat;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,6 +48,9 @@ public class ClientServiceImpl implements ClientService {
         Double variance = getVariance(clients, avgAge);
         Double standardDeviation = calculateStdDeviation(variance);
 
+        DecimalFormat df = new DecimalFormat("#.##");
+        avgAge = Double.parseDouble(df.format(avgAge));
+        standardDeviation = Double.parseDouble(df.format(standardDeviation));
         return clientMapper.clientEntityList2KpiDtoResponse(avgAge, standardDeviation);
     }
 
