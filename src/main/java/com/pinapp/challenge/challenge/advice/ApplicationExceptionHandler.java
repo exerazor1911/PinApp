@@ -1,8 +1,11 @@
 package com.pinapp.challenge.challenge.advice;
 
+import com.pinapp.challenge.challenge.exception.RegisterException;
+import io.swagger.v3.oas.annotations.Hidden;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
@@ -10,6 +13,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 @RestControllerAdvice
+@Hidden
 public class ApplicationExceptionHandler {
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
@@ -24,6 +28,13 @@ public class ApplicationExceptionHandler {
         });
 
         return errorSet;
+    }
+
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ExceptionHandler(RegisterException.class)
+    @ResponseBody
+    public String handleRegisterException(RegisterException ex) {
+        return ex.getMessage();
     }
 
 }

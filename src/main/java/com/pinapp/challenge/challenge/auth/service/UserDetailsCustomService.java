@@ -3,6 +3,7 @@ package com.pinapp.challenge.challenge.auth.service;
 import com.pinapp.challenge.challenge.auth.dto.request.UserDto;
 import com.pinapp.challenge.challenge.auth.entity.UserEntity;
 import com.pinapp.challenge.challenge.auth.repository.UserRepository;
+import com.pinapp.challenge.challenge.exception.RegisterException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -12,6 +13,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -34,6 +36,12 @@ public class UserDetailsCustomService implements UserDetailsService {
     }
 
     public boolean save(UserDto userDTO) {
+        Optional<UserEntity> existingUser = Optional.ofNullable(userRepository.findByUsername(userDTO.getUsername()));
+
+        if (existingUser.isPresent()) {
+            throw new RegisterException("Correo electronico en uso, seleccione otro por favor");
+        }
+
         UserEntity userEntity = new UserEntity();
         userEntity.setUsername(userDTO.getUsername());
         userEntity.setPassword(encoder.encode(userDTO.getPassword()));

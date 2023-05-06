@@ -6,6 +6,7 @@ import com.pinapp.challenge.challenge.auth.dto.response.AuthenticationResponse;
 import com.pinapp.challenge.challenge.auth.service.SignInService;
 import com.pinapp.challenge.challenge.auth.service.UserDetailsCustomService;
 import com.pinapp.challenge.challenge.dto.request.ClientDtoRequest;
+import com.pinapp.challenge.challenge.exception.RegisterException;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
