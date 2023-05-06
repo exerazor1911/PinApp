@@ -13,9 +13,7 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtils {
-    //private String SECRET_KEY = System.getenv("SECRET_KEY");
-    private String SECRET_KEY = "THISISTHEMOSTSUPERSECRETKEYINTHEWORLDPLEASENEVERSHAREITWITHANYONEASITCOULDBEDANGEROUS";
-
+    private String SECRET_KEY = System.getenv("SECRET_KEY");
     private final String BEARER = "Bearer ";
     public String extractUsername(String token) {return extractClaim(token, Claims::getSubject);}
 
