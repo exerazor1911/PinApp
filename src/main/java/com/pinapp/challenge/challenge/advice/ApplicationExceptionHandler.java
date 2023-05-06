@@ -30,7 +30,7 @@ public class ApplicationExceptionHandler {
         return errorSet;
     }
 
-    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    @ResponseStatus(HttpStatus.CONFLICT)
     @ExceptionHandler(RegisterException.class)
     @ResponseBody
     public String handleRegisterException(RegisterException ex) {
