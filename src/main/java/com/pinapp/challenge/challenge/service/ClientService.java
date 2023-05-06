@@ -1,14 +1,16 @@
 package com.pinapp.challenge.challenge.service;
 
-import com.pinapp.challenge.challenge.repository.ClientRepository;
-import lombok.RequiredArgsConstructor;
-import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
+import com.pinapp.challenge.challenge.dto.request.ClientDtoRequest;
+import com.pinapp.challenge.challenge.dto.response.ClientDto;
+import com.pinapp.challenge.challenge.dto.response.ClientKpiDtoResponse;
+import com.pinapp.challenge.challenge.dto.response.ClientResponseDto;
 
-@Service
-@RequiredArgsConstructor
-@Slf4j
-public class ClientService {
+import java.util.List;
 
-    private final ClientRepository clientRepository;
+public interface ClientService {
+    public ClientResponseDto createClient(ClientDtoRequest request);
+
+    public ClientKpiDtoResponse getClientsKpi();
+
+    public List<ClientDto> getClientsList();
 }

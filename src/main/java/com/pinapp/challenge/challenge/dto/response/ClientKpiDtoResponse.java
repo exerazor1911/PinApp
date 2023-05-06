@@ -1,5 +1,6 @@
 package com.pinapp.challenge.challenge.dto.response;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -13,8 +14,10 @@ import java.math.BigDecimal;
 @NoArgsConstructor
 public class ClientKpiDtoResponse {
 
+    @JsonProperty("promedioEdad")
     private Double ageAverage;
 
-    private BigDecimal standardDeviation;
+    @JsonProperty("desviacionEstandar")
+    private Double standardDeviation;
 
 }

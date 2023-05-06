@@ -1,31 +1,32 @@
 package com.pinapp.challenge.challenge.dto.request;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import com.pinapp.challenge.challenge.utility.GlobalConstants;
+import jakarta.validation.constraints.*;
+import lombok.*;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.NotNull;
-import java.time.LocalDate;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
+@Getter
 public class ClientDtoRequest {
 
-    @NotNull(message = "El nombre del cliente es obligatorio")
+    @NotBlank(message = "El nombre del cliente es obligatorio")
+    @JsonProperty("nombre")
     private String name;
 
-    @NotNull(message = "El apellido del cliente es obligatorio")
+    @NotBlank(message = "El apellido del cliente es obligatorio")
+    @JsonProperty("apellido")
     private String surname;
 
     @NotNull(message = "La edad del cliente es obligatoria")
+    @JsonProperty("edad")
+    @Min(value = 18, message = "El cliente debe ser mayor de edad")
+    @Max(value = 120, message = "El limite de edad es de 120")
     private Integer age;
 
-    @NotNull(message = "La fecha de Nacimiento del cliente es obligatoria")
-    @DateTimeFormat(pattern = "dd-MM-yyyy")
-    private LocalDate birthDate;
+    @NotBlank(message = "La fecha de Nacimiento del cliente es obligatoria")
+    @Pattern(regexp = GlobalConstants.VALIDATION_DD_MM_YYYY)
+    @JsonProperty("fechaDeNacimiento")
+    private String birthDate;
 
 }
