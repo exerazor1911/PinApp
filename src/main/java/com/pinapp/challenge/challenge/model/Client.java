@@ -8,7 +8,7 @@ import org.hibernate.annotations.Where;
 
 
 @Entity
-@Table(name = "clients")
+@Table(name = "client")
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder

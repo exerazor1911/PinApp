@@ -21,8 +21,8 @@ public class ClientDtoRequest {
 
     @NotNull(message = "La edad del cliente es obligatoria")
     @JsonProperty("edad")
-    @Min(value = 18, message = "El cliente debe ser mayor de edad")
-    @Max(value = 120, message = "El limite de edad es de 120")
+    @Min(value = 1, message = "El minimo de edad del cliente es de 1")
+    @Max(value = 120, message = "El limite de edad del cliente es de 120")
     private Integer age;
 
     @NotBlank(message = "La fecha de Nacimiento del cliente es obligatoria")
