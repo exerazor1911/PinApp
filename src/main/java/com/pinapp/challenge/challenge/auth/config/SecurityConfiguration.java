@@ -3,11 +3,12 @@ package com.pinapp.challenge.challenge.auth.config;
 import com.pinapp.challenge.challenge.auth.filter.JwtRequestFilter;
 import com.pinapp.challenge.challenge.auth.service.JwtUtils;
 import com.pinapp.challenge.challenge.auth.service.UserDetailsCustomService;
-import lombok.RequiredArgsConstructor;
+import com.pinapp.challenge.challenge.utility.GlobalConstants;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -31,11 +32,17 @@ public class SecurityConfiguration {
     @Lazy
     private UserDetailsCustomService userDetailsCustomService;
 
+
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         http.csrf().disable()
                 .authorizeRequests()
-                .requestMatchers("/auth/*")
+                /*.requestMatchers(HttpMethod.POST, GlobalConstants.HOME + GlobalConstants.ENDPOINT_POST_CREATE_CLIENT).permitAll()*/
+                .requestMatchers(
+                        GlobalConstants.AUTHORIZATION_REQUEST,
+                        GlobalConstants.SWAGGER_REQUEST,
+                        GlobalConstants.OPENAPI_REQUEST
+                )
                 .permitAll()
                 .anyRequest().authenticated()
                 .and().sessionManagement()

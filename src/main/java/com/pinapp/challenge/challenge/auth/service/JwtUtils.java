@@ -13,8 +13,10 @@ import java.util.function.Function;
 
 @Service
 public class JwtUtils {
+    //private String SECRET_KEY = System.getenv("SECRET_KEY");
     private String SECRET_KEY = "THISISTHEMOSTSUPERSECRETKEYINTHEWORLDPLEASENEVERSHAREITWITHANYONEASITCOULDBEDANGEROUS";
 
+    private final String BEARER = "Bearer ";
     public String extractUsername(String token) {return extractClaim(token, Claims::getSubject);}
 
     public Date extractExpiration(String token) {return extractClaim(token, Claims::getExpiration);}
@@ -44,6 +46,10 @@ public class JwtUtils {
     public Boolean validateToken(String token, UserDetails userDetails) {
         final String userName = extractUsername(token);
         return (userName.equals(userDetails.getUsername()) && !isTokenExpired(token));
+    }
+
+    public Boolean isBearer(String token) {
+        return token != null && token.startsWith(BEARER) && token.split("\\.").length == 3;
     }
 
 }

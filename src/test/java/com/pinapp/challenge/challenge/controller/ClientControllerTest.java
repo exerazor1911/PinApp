@@ -1,6 +1,8 @@
 package com.pinapp.challenge.challenge.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.pinapp.challenge.challenge.auth.service.JwtUtils;
+import com.pinapp.challenge.challenge.auth.service.UserDetailsCustomService;
 import com.pinapp.challenge.challenge.dto.request.ClientDtoRequest;
 import com.pinapp.challenge.challenge.dto.response.ClientDto;
 import com.pinapp.challenge.challenge.dto.response.ClientKpiDtoResponse;
@@ -13,9 +15,12 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
@@ -23,12 +28,10 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+
 @WebMvcTest(ClientController.class)
 class ClientControllerTest {
-
-
-
 
     @Autowired
     private MockMvc mockMvc;
@@ -36,28 +39,30 @@ class ClientControllerTest {
     @MockBean
     private ClientService clientService;
 
- /*   @MockBean
-    private JwtService jwtService; // TO MOCK CREDENTIALS*/
+    @MockBean
+    UserDetailsCustomService userDetailsCustomService;
+
+   @MockBean
+   private JwtUtils jwtUtils;
 
     ObjectMapper jsonMapper = new ObjectMapper();
 
-
     @Nested
     class createClientTest {
+
         @Test
         @DisplayName("Caso valido")
-            //@WithMockUser(username = "mock.user@mockmail.mock", authorities = GlobalConstants.ROLE_ADMIN)
+        @WithMockUser(username = "mock.user@mockmail.mock")
         void test1() throws Exception {
             ClientDtoRequest request = generateClientDtoRequest();
             ClientResponseDto expectedResponse = generateClientResponseDto();
 
             Mockito.when(clientService.createClient(Mockito.any())).thenReturn(expectedResponse);
 
-            mockMvc.perform(MockMvcRequestBuilders.post(GlobalConstants.HOME + GlobalConstants.ENDPOINT_POST_CREATE_CLIENT)
+            mockMvc.perform(MockMvcRequestBuilders.post(GlobalConstants.HOME + GlobalConstants.ENDPOINT_POST_CREATE_CLIENT).with(csrf())
                             .content(jsonMapper.writeValueAsString(request))
                             .contentType(MediaType.APPLICATION_JSON)
                     )
-
                     .andExpect(MockMvcResultMatchers.status().isCreated())
                     .andExpect(MockMvcResultMatchers.content().contentType(MediaType.APPLICATION_JSON))
                     .andExpect(MockMvcResultMatchers.content().json(jsonMapper.writeValueAsString(expectedResponse)))
@@ -68,13 +73,11 @@ class ClientControllerTest {
 
         @Test
         @DisplayName("Caso no valido, campos faltantes")
-            //@WithMockUser(username = "mock.user@mockmail.mock", authorities = GlobalConstants.ROLE_ADMIN)
+        @WithMockUser(username = "mock.user@mockmail.mock")
         void test2() throws Exception {
             ClientDtoRequest request = ClientDtoRequest.builder().build();
 
-            //Mockito.when(clientService.createClient(Mockito.any())).thenReturn(expectedResponse);
-
-            mockMvc.perform(MockMvcRequestBuilders.post(GlobalConstants.HOME + GlobalConstants.ENDPOINT_POST_CREATE_CLIENT)
+            mockMvc.perform(MockMvcRequestBuilders.post(GlobalConstants.HOME + GlobalConstants.ENDPOINT_POST_CREATE_CLIENT).with(csrf())
                             .content(jsonMapper.writeValueAsString(request))
                             .contentType(MediaType.APPLICATION_JSON)
                     )
@@ -88,13 +91,32 @@ class ClientControllerTest {
                     .andDo(MockMvcResultHandlers.print());
 
         }
+
+        @Test
+        @DisplayName("Token no provisto")
+        void test3() throws Exception {
+
+            Mockito.when(jwtUtils.isBearer(Mockito.any())).thenReturn(false);
+
+            ClientResponseDto expectedResponse = generateClientResponseDto();
+
+            Mockito.when(clientService.createClient(Mockito.any())).thenReturn(expectedResponse);
+
+            mockMvc.perform(MockMvcRequestBuilders.post(GlobalConstants.HOME + GlobalConstants.ENDPOINT_POST_CREATE_CLIENT))
+                    .andExpect(MockMvcResultMatchers.status().isForbidden())
+                    .andExpect(MockMvcResultMatchers.content().string(Matchers.not(Matchers.containsString("testname"))))
+                    .andDo(MockMvcResultHandlers.print());
+
+            Mockito.verify(clientService, Mockito.never()).createClient(Mockito.any());
+
+        }
     }
 
     @Nested
     class getClientsKpiTest {
         @Test
         @DisplayName("Caso valido")
-            //@WithMockUser(username = "mock.user@mockmail.mock", authorities = GlobalConstants.ROLE_ADMIN)
+        @WithMockUser(username = "mock.user@mockmail.mock")
         void test1() throws Exception {
 
             ClientKpiDtoResponse expectedResponse = generateClientKpiDtoResponse();
@@ -109,13 +131,32 @@ class ClientControllerTest {
 
             Mockito.verify(clientService).getClientsKpi();
         }
+
+        @Test
+        @DisplayName("Token no provisto")
+        void test2() throws Exception {
+
+            Mockito.when(jwtUtils.isBearer(Mockito.any())).thenReturn(false);
+
+            ClientKpiDtoResponse expectedResponse = generateClientKpiDtoResponse();
+
+            Mockito.when(clientService.getClientsKpi()).thenReturn(expectedResponse);
+
+            mockMvc.perform(MockMvcRequestBuilders.post(GlobalConstants.HOME + GlobalConstants.ENDPOINT_GET_CLIENT_KPI))
+                    .andExpect(MockMvcResultMatchers.status().isForbidden())
+                    .andExpect(MockMvcResultMatchers.content().string(Matchers.not(Matchers.containsString("promedioEdad"))))
+                    .andDo(MockMvcResultHandlers.print());
+
+            Mockito.verify(clientService, Mockito.never()).getClientsKpi();
+
+        }
     }
 
     @Nested
     class getClientsList {
         @Test
         @DisplayName("Caso valido")
-            //@WithMockUser(username = "mock.user@mockmail.mock", authorities = GlobalConstants.ROLE_ADMIN)
+        @WithMockUser(username = "mock.user@mockmail.mock")
         void test1() throws Exception {
 
             List<ClientDto> expectedResponse = generateClientDtoResponses();
@@ -130,10 +171,29 @@ class ClientControllerTest {
 
             Mockito.verify(clientService).getClientsList();
         }
+
+        @Test
+        @DisplayName("Token no provisto")
+        void test2() throws Exception {
+
+            Mockito.when(jwtUtils.isBearer(Mockito.any())).thenReturn(false);
+
+            List<ClientDto> expectedResponse = generateClientDtoResponses();
+
+            Mockito.when(clientService.getClientsList()).thenReturn(expectedResponse);
+
+            mockMvc.perform(MockMvcRequestBuilders.post(GlobalConstants.HOME + GlobalConstants.ENDPOINT_GET_CLIENT_KPI))
+                    .andExpect(MockMvcResultMatchers.status().isForbidden())
+                    .andExpect(MockMvcResultMatchers.content().string(Matchers.not(Matchers.containsString("nombre"))))
+                    .andDo(MockMvcResultHandlers.print());
+
+            Mockito.verify(clientService, Mockito.never()).getClientsList();
+
+        }
     }
 
 
-    private static ClientResponseDto generateClientResponseDto() {
+    public static ClientResponseDto generateClientResponseDto() {
         ClientResponseDto response = ClientResponseDto.builder()
                 .name("testname")
                 .surname("testsurname")
@@ -175,7 +235,7 @@ class ClientControllerTest {
         return response;
     }
 
-    private static ClientDtoRequest generateClientDtoRequest() {
+    public static ClientDtoRequest generateClientDtoRequest() {
         ClientDtoRequest request = ClientDtoRequest.builder()
                 .name("testname")
                 .surname("testsurname")

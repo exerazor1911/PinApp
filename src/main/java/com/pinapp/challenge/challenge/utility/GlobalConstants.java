@@ -25,4 +25,8 @@ public abstract class GlobalConstants {
 
     public static final Double TEST_STANDARD_DEV = 2.05;
 
+    public static String AUTHORIZATION_REQUEST = "/auth/*";
+    public static String SWAGGER_REQUEST = "/swagger-ui/**";
+    public static String OPENAPI_REQUEST = "/v3/api-docs/**";
+
 }

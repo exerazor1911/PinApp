@@ -3,8 +3,8 @@ package com.pinapp.challenge.challenge.dto.request;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.pinapp.challenge.challenge.utility.GlobalConstants;
 import jakarta.validation.constraints.*;
-import lombok.*;
-import org.springframework.format.annotation.DateTimeFormat;
+import lombok.Builder;
+import lombok.Getter;
 
 
 @Getter

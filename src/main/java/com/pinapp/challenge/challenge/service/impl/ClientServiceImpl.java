@@ -8,20 +8,11 @@ import com.pinapp.challenge.challenge.mapper.ClientMapper;
 import com.pinapp.challenge.challenge.model.Client;
 import com.pinapp.challenge.challenge.repository.ClientRepository;
 import com.pinapp.challenge.challenge.service.ClientService;
-import com.pinapp.challenge.challenge.utility.LifeTableRow;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.poi.ss.usermodel.Row;
-import org.apache.poi.ss.usermodel.Sheet;
-import org.apache.poi.ss.usermodel.Workbook;
-import org.apache.poi.ss.usermodel.WorkbookFactory;
 import org.springframework.stereotype.Service;
 
-import java.io.File;
-import java.io.IOException;
 import java.text.DecimalFormat;
-import java.time.LocalDate;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
