@@ -38,7 +38,7 @@ public class ClientController {
                     @ApiResponse(responseCode = "400", description = "Bad Request", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = String.class))})
             }
     )
-    @PostMapping(GlobalConstants.POST_CREATE_CLIENT)
+    @PostMapping(GlobalConstants.ENDPOINT_POST_CREATE_CLIENT)
     public ResponseEntity<?> createClient(@Valid @RequestBody ClientDtoRequest request) {
         ClientResponseDto savedClient = clientService.createClient(request);
         return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
@@ -51,7 +51,7 @@ public class ClientController {
                     @ApiResponse(responseCode = "200", description = "Devuelve el promedio y la desviacion estandar de las edades de los Clientes", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ClientKpiDtoResponse.class))}),
             }
     )
-    @GetMapping(GlobalConstants.GET_CLIENT_KPI)
+    @GetMapping(GlobalConstants.ENDPOINT_GET_CLIENT_KPI)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getClientsKpi() {
         return ResponseEntity.ok().body(clientService.getClientsKpi());
@@ -61,10 +61,10 @@ public class ClientController {
     )
     @ApiResponses(
             value = {
-                    @ApiResponse(responseCode = "200", description = "evuelve la informacion de los clientes sumada a su probable fecha de muerte", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ClientDto.class))}),
+                    @ApiResponse(responseCode = "200", description = "Devuelve la informacion de los clientes sumada a su probable fecha de muerte", content = {@Content(mediaType = "application/json", schema = @Schema(implementation = ClientDto.class))}),
             }
     )
-    @GetMapping(GlobalConstants.GET_LIST_CLIENTS)
+    @GetMapping(GlobalConstants.ENDPOINT_GET_LIST_CLIENTS)
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<?> getClientsList() {
         return ResponseEntity.ok().body(clientService.getClientsList());

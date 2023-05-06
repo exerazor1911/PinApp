@@ -8,6 +8,7 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 
 @Getter
+@Builder
 public class ClientDtoRequest {
 
     @NotBlank(message = "El nombre del cliente es obligatorio")
