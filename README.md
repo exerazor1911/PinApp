@@ -35,6 +35,8 @@ The documentation for this API is available in Swagger. To access it, start the 
 
 ```
 http://server:port/swagger-ui.html
+- Local: http://localhost:8080/swagger-ui/index.html
+- AWS: http://54.94.163.115:8080/swagger-ui/index.html
 ```
 
 ## Deployment
