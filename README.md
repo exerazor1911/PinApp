@@ -10,12 +10,41 @@ This project is a service developed using Java Spring Boot and documented in Swa
 - Edad / Age
 - Date of birth / Fecha de Nacimiento
 
+#### URL
+- Local: http://localhost:8080/creacliente
+- AWS: http://54.94.163.115:8080/creacliente
+
 ### GET /kpideclientes
 - Average age among all clients / Edad promedio de los clientes
 - Standard deviation of ages among all clients / Desviacion Estandar de las edades de todos los clientes
 
+#### URL
+- Local: http://localhost:8080/kpideclientes
+- AWS: http://54.94.163.115:8080/kpideclientes
+
 ### GET /listclientes
 - List of people with all the details including the probable date of death of each one. / Listado de personas incluyendo su fecha probable de muerte
+
+#### URL
+- Local: http://localhost:8080/listclientes
+- AWS: http://54.94.163.115:8080/listclientes
+
+### POST /auth/signup
+- Create a user in order to be able to access the applications endpoints.
+
+#### URL
+- Local: http://localhost:8080/signup
+- AWS: http://54.94.163.115:8080/auth/signup
+
+### POST /auth/signin
+- Access with your user in order to obtain the bearer token.
+
+#### URL
+- Local: http://localhost:8080/signin
+- AWS: http://54.94.163.115:8080/auth/signin
+
+## Considerations
+Please take into account that the project uses Spring security so in order to access the endpoints, you should have a bearer token.
 
 ## Technologies Used
 - Java
